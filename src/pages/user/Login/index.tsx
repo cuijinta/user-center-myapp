@@ -1,23 +1,16 @@
 import Footer from '@/components/Footer';
 import {login} from '@/services/ant-design-pro/api';
-import {getFakeCaptcha} from '@/services/ant-design-pro/login';
 import {
-  AlipayCircleOutlined,
   LockOutlined,
-  MobileOutlined,
-  TaobaoCircleOutlined,
   UserOutlined,
-  WeiboCircleOutlined,
 } from '@ant-design/icons';
 import {
-  LoginForm,
-  ProFormCaptcha,
-  ProFormCheckbox,
+  LoginForm, ProFormCheckbox,
   ProFormText,
 } from '@ant-design/pro-components';
-import {Alert, message, Tabs} from 'antd';
+import {Alert, Divider, message, Space, Tabs} from 'antd';
 import React, {useState} from 'react';
-import {history, useModel} from 'umi';
+import {history, Link, useModel} from 'umi';
 import styles from './index.less';
 import {SYSTEM_LOGO} from "@/constants";
 
@@ -33,8 +26,9 @@ const LoginMessage: React.FC<{
     showIcon
   />
 );
+
 const Login: React.FC = () => {
-  const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
+  const [userLoginState] = useState<API.LoginResult>({});
   const [type, setType] = useState<string>('account');
   const {initialState, setInitialState} = useModel('@@initialState');
   const fetchUserInfo = async () => {
@@ -49,11 +43,12 @@ const Login: React.FC = () => {
   const handleSubmit = async (values: API.LoginParams) => {
     try {
       // 登录
-      const msg = await login({
-        ...values,
-        type,
-      });
-      if (msg.status === 'ok') {
+      // const msg = await login({
+      //   ...values,
+      //   type,
+      // });
+      const user = await login({...values, type});
+      if (user) {
         const defaultLoginSuccessMessage = '登录成功！';
         message.success(defaultLoginSuccessMessage);
         await fetchUserInfo();
@@ -66,15 +61,16 @@ const Login: React.FC = () => {
         history.push(redirect || '/');
         return;
       }
-      console.log(msg);
+      // console.log(msg);
       // 如果失败去设置用户错误信息
-      setUserLoginState(msg);
+      // setUserLoginState(msg);
     } catch (error) {
       const defaultLoginFailureMessage = '登录失败，请重试！';
       message.error(defaultLoginFailureMessage);
     }
   };
   const {status, type: loginType} = userLoginState;
+  // const [passwordVisible, setPasswordVisible] = React.useState(false);
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -82,16 +78,10 @@ const Login: React.FC = () => {
           logo={<img alt="logo" src={SYSTEM_LOGO}/>}
           title="用户中心"
           // subTitle={'Ant Design 是西湖区最具影响力的 Web 设计规范'}
-          subTitle={'用户中心是系列产品的用户管理中心'}
+          subTitle={'系列项目的用户管理与控制中心'}
           initialValues={{
             autoLogin: true,
           }}
-          // actions={[
-          //   '其他登录方式 :',
-          //   <AlipayCircleOutlined key="AlipayCircleOutlined" className={styles.icon}/>,
-          //   <TaobaoCircleOutlined key="TaobaoCircleOutlined" className={styles.icon}/>,
-          //   <WeiboCircleOutlined key="WeiboCircleOutlined" className={styles.icon}/>,
-          // ]}
           onFinish={async (values) => {
             await handleSubmit(values as API.LoginParams);
           }}
@@ -120,13 +110,14 @@ const Login: React.FC = () => {
                   },
                 ]}
               />
-              <ProFormText
+              <ProFormText.Password
                 name="userPassword"
                 fieldProps={{
                   size: 'large',
                   prefix: <LockOutlined className={styles.prefixIcon}/>,
                 }}
-                placeholder={'请输入密码'}
+                placeholder='请输入密码'
+                // iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                 rules={[
                   {
                     required: true,
@@ -139,6 +130,7 @@ const Login: React.FC = () => {
                   },
                 ]}
               />
+
             </>
           )}
 
@@ -149,9 +141,13 @@ const Login: React.FC = () => {
               marginBottom: 24,
             }}
           >
+            <Space split={<Divider type="vertical" />} wrap={false}>
             <ProFormCheckbox noStyle name="autoLogin">
               自动登录
             </ProFormCheckbox>
+            <Link to="/user/register">
+              新用户注册
+            </Link>
             <a
               style={{
                 float: 'right',
@@ -159,8 +155,10 @@ const Login: React.FC = () => {
             >
               忘记密码 ?
             </a>
+            </Space>
           </div>
         </LoginForm>
+
       </div>
       <Footer/>
     </div>
