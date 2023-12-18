@@ -18,13 +18,14 @@ export default [
         name: '管理页',
         icon: 'crown',
         access: 'canAdmin',
+        component: './Admin',
         routes: [
-            {path: '/admin/sub-page', name: '二级管理页', icon: 'smile', component: './Welcome'},
+            {path: '/admin/user-manage', name: '用户管理', icon: 'smile', component: './Admin/UserManage'},
             {component: './404'},
         ],
     },
     {name: '查询表格', icon: 'table', path: '/list', component: './TableList'},
     {path: '/', redirect: '/welcome'},
-    {icon: 'smile', path: '/qianye', component: './AccountCenter'},
+    // {icon: 'smile', path: '/qianye', component: './AccountCenter'},
     {component: './404'},
 ];
