@@ -19,6 +19,11 @@ export const waitTime = async (time: number = 100) => {
 // @ts-ignore
 const columns: ProColumns<CurrentUser>[] = [
   {
+    title: '用户编号',
+    dataIndex: 'code',  //数据索引
+    copyable: true
+  },
+  {
     dataIndex: 'id',  //对应后端的列名
     valueType: 'indexBorder',
     width: 48,

@@ -22,7 +22,7 @@ const loginOut = async () => {
   const { redirect } = query;
   // Note: There may be security issues, please note
   if (window.location.pathname !== '/user/login' && !redirect) {
-    history.replace({
+    history.replace({ //跳转到指定的地址
       pathname: '/user/login',
       search: stringify({
         redirect: pathname + search,

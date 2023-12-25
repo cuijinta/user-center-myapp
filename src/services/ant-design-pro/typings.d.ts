@@ -13,6 +13,7 @@ declare namespace API {
     userStatus: number;
     email: string;
     userRole: number;
+    code:string;
 
 
   //   name?: string;
@@ -63,6 +64,16 @@ declare namespace API {
     progress?: number;
   };
 
+  /**
+   * 对接后端的通用返回类
+   */
+  type Result<T> = {
+    code: number,
+    data: T,
+    message: string,
+    description: string,
+  }
+
   type RuleList = {
     data?: RuleListItem[];
     /** 列表的内容总数 */
@@ -84,7 +95,8 @@ declare namespace API {
   type RegisterParams = {
     userAccount?: string;
     userPassword?: string;
-    checkPassword?: string
+    checkPassword?: string;
+    code?:string;
     type?: string;
   };
 

@@ -1,18 +1,18 @@
 // @ts-ignore
 /* eslint-disable */
-import { request } from 'umi';
+import request from '@/plugins/globalRequest';
 
 /** 获取当前的用户 GET /api/user/current */
 export async function currentUser(options?: { [key: string]: any }) {
-  return request< API.CurrentUser>('/api/user/current', {
+  return request<API.Result<API.CurrentUser>>('/api/user/current', {
     method: 'GET',
     ...(options || {}),
   });
 }
 
-/** 退出登录接口 POST /api/login/outLogin */
+/** 退出登录接口 POST /api/user/logout */
 export async function outLogin(options?: { [key: string]: any }) {
-  return request<Record<string, any>>('/api/login/outLogin', {
+  return request<API.Result<number>>('/api/user/logout', {
     method: 'POST',
     ...(options || {}),
   });
@@ -20,7 +20,7 @@ export async function outLogin(options?: { [key: string]: any }) {
 
 /** 登录接口 POST /api/user/login */
 export async function login(body: API.LoginParams, options?: { [key: string]: any }) {
-  return request<API.LoginResult>('/api/user/login', {
+  return request<API.Result<API.LoginResult>>('/api/user/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ export async function login(body: API.LoginParams, options?: { [key: string]: an
 
 /** 注册接口 POST /api/user/register */
 export async function register(body: API.LoginParams, options?: { [key: string]: any })  {
-  return request<API.RegisterResult>('/api/user/register', {
+  return request<API.Result<API.RegisterResult>>('/api/user/register', { //统一返回结果，对应后端的响应
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ export async function getNotices(options?: { [key: string]: any }) {
  * @param options
  */
 export async function searchUsers(options?: { [key: string]: any }) {
-  return request<API.CurrentUser[]>('/api/user/search', {
+  return request<API.Result<API.CurrentUser[]>>('/api/user/search', {
     method: 'GET',
     ...(options || {}),
   });
